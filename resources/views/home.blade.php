@@ -12,7 +12,7 @@
       <div class="col-md-8">
      
         <!-- Blog Post -->
-        <home></home>
+        <global-home></global-home>
 
         <!-- Pagination -->
         <nav aria-label="...">
