@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Category;
-use App\User;
-use App\Comments;
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Comments;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
