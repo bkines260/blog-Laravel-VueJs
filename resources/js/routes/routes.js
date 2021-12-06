@@ -6,9 +6,13 @@ Vue.use(VueRouter);
 import Post from '../components/Posts.vue';
 import PostDetails from '../components/PostDetails.vue';
 
+const GetPostDetails = {
+    props: ['slug']
+}
+
 const routes=[
     {path:'/', component:Post,name:'posts'},
-    {path:'/post/:slug',component:PostDetails,name:'PostDetails'}
+    {path:'/post/:slug',component:PostDetails,name:'GetPostDetails',props: true }
 ];
 
 const router = new VueRouter({

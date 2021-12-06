@@ -4,7 +4,8 @@
             <img class="mr-3" :src="'img/'+post.image" alt="Generic placeholder image">
             <div class="media-body">
                 <h4 class="mt-0">
-                    <router-link :to="'/post/'+post.slug">{{post.title}}</router-link>
+                    <!-- <router-link :to="'/post/'+post.slug">{{post.title}}</router-link> -->
+                    <router-link :to="{ name: 'GetPostDetails', params: {slug:post.slug } }">{{post.title}}</router-link> 
                 </h4>
                 {{post.body.substr(0,150)}}
             <ul class="list-inline list-unstyled d-flex post-info">

@@ -2092,17 +2092,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      post: ''
+    };
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
   }
@@ -2121,6 +2116,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -2273,6 +2269,9 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 
+var GetPostDetails = {
+  props: ['slug']
+};
 var routes = [{
   path: '/',
   component: _components_Posts_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -2280,7 +2279,8 @@ var routes = [{
 }, {
   path: '/post/:slug',
   component: _components_PostDetails_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-  name: 'PostDetails'
+  name: 'GetPostDetails',
+  props: true
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes,
@@ -37856,32 +37856,11 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _vm._v("\n   post details\n"),
+  ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component"),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              ),
-            ]),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -37918,9 +37897,15 @@ var render = function () {
             "h4",
             { staticClass: "mt-0" },
             [
-              _c("router-link", { attrs: { to: "/post/" + post.slug } }, [
-                _vm._v(_vm._s(post.title)),
-              ]),
+              _c(
+                "router-link",
+                {
+                  attrs: {
+                    to: { name: "GetPostDetails", params: { slug: post.slug } },
+                  },
+                },
+                [_vm._v(_vm._s(post.title))]
+              ),
             ],
             1
           ),
