@@ -25,25 +25,25 @@
 </head>
 <body>
     <div id="app">
-       @include('layouts.header');
-       @yield('content');
-       @include('layouts.footer');
+       @include('layouts.header')
+       @yield('content')
+       @include('layouts.footer')
     </div>
     <script src="{{asset('js/app.js')}}" defer></script>
      <!-- Bootstrap core JavaScript -->
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
     <script>
-    $(document).ready(function(){
-        $('.switch-tologin-modal').on('click',function(){
-        $('#register-modal').modal('hide');
-        $('#login-modal').modal('show');
+        $(document).ready(function(){
+            $('.switch-tologin-modal').on('click',function(){
+            $('#register-modal').modal('hide');
+            $('#login-modal').modal('show');
+            })
+            $('.switch-toregister-modal').on('click',function(){
+            $('#login-modal').modal('hide');
+            $('#register-modal').modal('show');
+            })
         })
-        $('.switch-toregister-modal').on('click',function(){
-        $('#login-modal').modal('hide');
-        $('#register-modal').modal('show');
-        })
-    })
     </script>
 </body>
 </html>

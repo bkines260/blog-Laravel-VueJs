@@ -2092,14 +2092,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       post: ''
     };
   },
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  created: function created() {
+    this.getPost();
+  },
+  methods: {
+    getPost: function getPost() {
+      var _this = this;
+
+      axios.get('/api/posts/' + this.$route.params.slug).then(function (res) {
+        _this.post = res.data;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
   }
 });
 
@@ -2116,6 +2174,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -37856,11 +37933,113 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _vm._v("\n   post details\n"),
-  ])
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c("h1", { staticClass: "mt-4" }, [_vm._v(_vm._s(_vm.post.title))]),
+      _vm._v(" "),
+      _vm.post.category
+        ? _c(
+            "p",
+            {
+              staticClass: " alert alert-info",
+              staticStyle: {
+                width: "fit-content",
+                padding: "5px",
+                color: "#142d31",
+              },
+            },
+            [_vm._v(_vm._s(_vm.post.category.name) + "\n    ")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("Posted on "),
+        _c("strong", { staticClass: "badge badge-primary p-1" }, [
+          _vm._v(_vm._s(_vm.post.added_at)),
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "float-right" }, [
+          _c("strong", { staticClass: "badge badge-info p-1" }, [
+            _vm._v(_vm._s(_vm.post.comments_count)),
+          ]),
+          _vm._v(" comments"),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "img-fluid rounded",
+        staticStyle: {
+          width: "900px",
+          "max-height": "300px",
+          "object-fit": "contain",
+        },
+        attrs: { src: "/img/" + _vm.post.image, alt: "" },
+      }),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _vm._v("\n    " + _vm._s(_vm.post.body) + "      \n    "),
+      _c("hr"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._l(_vm.post.comments, function (comment, index) {
+        return _c("div", { key: index, staticClass: "media mb-4" }, [
+          _c("img", {
+            staticClass: "d-flex mr-3 rounded-circle",
+            staticStyle: {
+              height: "50px",
+              width: "50px",
+              "border-radius": "50px",
+            },
+            attrs: { src: "/img/" + comment.user.profile_img, alt: "" },
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "media-body" }, [
+            _c("h5", { staticClass: "mt-0" }, [
+              _vm._v(_vm._s(comment.user.name)),
+            ]),
+            _vm._v("\n        " + _vm._s(_vm.post.body) + "\n      "),
+          ]),
+        ])
+      }),
+    ],
+    2
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card my-4" }, [
+      _c("h5", { staticClass: "card-header" }, [_vm._v("Leave a Comment:")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("form", [
+          _c("div", { staticClass: "form-group" }, [
+            _c("textarea", {
+              staticClass: "form-control",
+              attrs: { rows: "3" },
+            }),
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+            [_vm._v("Submit")]
+          ),
+        ]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
@@ -37885,71 +38064,119 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.posts, function (post) {
-      return _c("div", { key: post.id, staticClass: "media simple-post" }, [
-        _c("img", {
-          staticClass: "mr-3",
-          attrs: { src: "img/" + post.image, alt: "Generic placeholder image" },
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "media-body" }, [
-          _c(
-            "h4",
-            { staticClass: "mt-0" },
-            [
-              _c(
-                "router-link",
-                {
-                  attrs: {
-                    to: { name: "GetPostDetails", params: { slug: post.slug } },
+    [
+      _vm._l(_vm.posts, function (post) {
+        return _c("div", { key: post.id, staticClass: "media simple-post" }, [
+          _c("img", {
+            staticClass: "mr-3",
+            attrs: {
+              src: "img/" + post.image,
+              alt: "Generic placeholder image",
+            },
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "media-body" }, [
+            _c(
+              "h4",
+              { staticClass: "mt-0" },
+              [
+                _c(
+                  "router-link",
+                  {
+                    attrs: {
+                      to: {
+                        name: "GetPostDetails",
+                        params: { slug: post.slug },
+                      },
+                    },
                   },
-                },
-                [_vm._v(_vm._s(post.title))]
-              ),
-            ],
-            1
-          ),
-          _vm._v(
-            "\n            " + _vm._s(post.body.substr(0, 150)) + "\n        "
-          ),
-          _c(
-            "ul",
-            { staticClass: "list-inline list-unstyled d-flex post-info" },
-            [
-              _c("li", [
-                _c("span", [
-                  _c("i", { staticClass: "fa fa-user" }),
-                  _vm._v(" posted by : "),
-                  _c("strong", { staticClass: "text-primary" }, [
-                    _vm._v(_vm._s(post.user.name)),
+                  [_vm._v(_vm._s(post.title))]
+                ),
+              ],
+              1
+            ),
+            _vm._v(
+              "\n            " + _vm._s(post.body.substr(0, 150)) + "\n        "
+            ),
+            _c(
+              "ul",
+              { staticClass: "list-inline list-unstyled d-flex post-info" },
+              [
+                _c("li", [
+                  _c("span", [
+                    _c("i", { staticClass: "fa fa-user" }),
+                    _vm._v(" posted by : "),
+                    _c("strong", { staticClass: "text-primary" }, [
+                      _vm._v(_vm._s(post.user.name)),
+                    ]),
                   ]),
                 ]),
-              ]),
-              _vm._v(" "),
-              _c("li", [_vm._v("|")]),
-              _vm._v(" "),
-              _c("li", [
-                _c("span", [
-                  _c("i", { staticClass: "fa fa-calendar" }),
-                  _vm._v(" " + _vm._s(post.added_at) + " "),
+                _vm._v(" "),
+                _c("li", [_vm._v("|")]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("span", [
+                    _c("i", { staticClass: "fa fa-calendar" }),
+                    _vm._v(" " + _vm._s(post.added_at) + " "),
+                  ]),
                 ]),
-              ]),
-              _vm._v(" "),
-              _c("li", [_vm._v("|")]),
-              _vm._v(" "),
-              _c("span", [
-                _c("i", { staticClass: "fa fa-comment" }),
-                _vm._v(" " + _vm._s(post.comments_count) + " comments"),
-              ]),
-            ]
-          ),
-        ]),
-      ])
-    }),
-    0
+                _vm._v(" "),
+                _c("li", [_vm._v("|")]),
+                _vm._v(" "),
+                _c("span", [
+                  _c("i", { staticClass: "fa fa-comment" }),
+                  _vm._v(" " + _vm._s(post.comments_count) + " comments"),
+                ]),
+              ]
+            ),
+          ]),
+        ])
+      }),
+      _vm._v(" "),
+      _vm._m(0),
+    ],
+    2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("nav", { attrs: { "aria-label": "..." } }, [
+      _c("ul", { staticClass: "pagination float-right" }, [
+        _c("li", { staticClass: "page-item disabled" }, [
+          _c("span", { staticClass: "page-link" }, [_vm._v("Previous")]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("1"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item active" }, [
+          _c("span", { staticClass: "page-link" }, [
+            _vm._v("\n            2\n            "),
+            _c("span", { staticClass: "sr-only" }, [_vm._v("(current)")]),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("3"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("Next"),
+          ]),
+        ]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
