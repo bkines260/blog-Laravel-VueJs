@@ -1,8 +1,11 @@
 <template>
     <div>
         <div class="row">
+            <div class="col-md-8 my-3" v-if="issearching">
+                Résultats de recherche pour {{searchwrd}}
+            </div>
             <div class="col-md-8">
-                <div class="media simple-post" v-for="post in posts" :key="post.id">
+                <div class="media simple-post" v-for="post in posts.data" :key="post.id">
                     <img class="mr-3" :src="'img/'+post.image" alt="Generic placeholder image">
                     <div class="media-body">
                         <h4 class="mt-0">
@@ -20,24 +23,7 @@
                     </div>
                 </div>
                 <!-- Pagination -->
-                <nav aria-label="...">
-                <ul class="pagination float-right">
-                    <li class="page-item disabled">
-                    <span class="page-link">Previous</span>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active">
-                    <span class="page-link">
-                        2
-                        <span class="sr-only">(current)</span>
-                    </span>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-                </nav>
+                <pagination :data="posts" @pagination-change-page="getPosts"></pagination>              
             </div>
 
             <!-- Sidebar Widgets Column -->
@@ -48,7 +34,7 @@
                 <h5 class="card-header">Search</h5>
                 <div class="card-body">
                     <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
+                    <input type="text" class="form-control" placeholder="Search for..." v-model="searchpost">
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="button">Go!</button>
                     </span>
@@ -69,21 +55,50 @@ import categories from './Categories.vue'
     export default {
         data(){
             return {
-                posts:{}
+                posts:{},
+                searchpost:'',
+                issearching:false,
+                searchwrd:'',
             }
         },
         components:{
             categories
         },
+        watch:{
+            searchpost(query){
+                if(query.length>0){
+                    console.log(query);
+                    this.searchwrd=query;
+                    axios.get('/api/searchposts/'+query)
+                    .then(res =>{
+                        this.posts = res.data
+                        this.issearching=true
+                        
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                }
+                else{
+                    let oldposts = JSON.parse(localStorage.getItem('all-posts'))
+                    this.posts=oldposts
+                    this.issearching=false
+
+                }
+            }
+        },
         mounted() {
             console.log('Component mounted.')
-            this.getPosts();
+            this.getPosts()
         },
         methods:{
-            getPosts(){
-                axios.get('/api/posts')
+            getPosts(page){
+                axios.get('/api/posts?page='+page)
                 .then(res=>
-                    {this.posts=res.data}
+                    {
+                        this.posts=res.data
+                        localStorage.setItem('all-posts', JSON.stringify(this.posts))
+                    }
                 )
                 .then(err => console.log(err))
             }

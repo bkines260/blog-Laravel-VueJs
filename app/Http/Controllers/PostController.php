@@ -17,7 +17,7 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts = Post::latest()->with('user')->get();
+        $posts = Post::latest()->with('user')->paginate(1);
         foreach($posts as $post){
             $post->setAttribute('added_at',$post->created_at->diffForHumans());
             $post->setAttribute('comments_count',$post->comments->count());
@@ -83,7 +83,7 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource.z
      *
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
@@ -118,6 +118,14 @@ class PostController extends Controller
     public function categoryPosts($slug){
         $category= Category::whereSlug($slug)->first();
         $posts = Post::whereCategoryId($category->id)->with('user')->get();
+        foreach($posts as $post){
+            $post->setAttribute('added_at',$post->created_at->diffForHumans());
+            $post->setAttribute('comments_count',$post->comments->count());
+        }
+        return response()->json($posts);
+    }
+    public function searchPosts($query){        
+        $posts = Post::where('title','like','%'.$query.'%')->with('user')->get();
         foreach($posts as $post){
             $post->setAttribute('added_at',$post->created_at->diffForHumans());
             $post->setAttribute('comments_count',$post->comments->count());
