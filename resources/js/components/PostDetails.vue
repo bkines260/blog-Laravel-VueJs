@@ -82,15 +82,15 @@
           this.getPost();
       },
       methods:{
-          getPost(){
-              axios.get('/api/posts/'+this.$route.params.slug)
-              .then(res=>{
-                  this.post=res.data
-              })
-              .catch(err=>{
-                  console.log(err)
-              })
-          }
+        getPost(){
+            axios.get('/api/posts/'+this.$route.params.slug)
+            .then(res=>{
+                this.post=res.data
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        }
       }
   }
 </script>
