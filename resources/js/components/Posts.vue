@@ -1,9 +1,6 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-8 my-3" v-if="issearching">
-                Résultats de recherche pour {{searchwrd}}
-            </div>
             <div class="col-md-8">
                 <div class="media simple-post" v-for="post in posts.data" :key="post.id">
                     <img class="mr-3" :src="'img/'+post.image" alt="Generic placeholder image">
@@ -57,7 +54,6 @@ import categories from './Categories.vue'
             return {
                 posts:{},
                 searchpost:'',
-                issearching:false,
                 searchwrd:'',
             }
         },
@@ -67,13 +63,10 @@ import categories from './Categories.vue'
         watch:{
             searchpost(query){
                 if(query.length>0){
-                    console.log(query);
-                    this.searchwrd=query;
+                    console.log(query);                   
                     axios.get('/api/searchposts/'+query)
                     .then(res =>{
-                        this.posts = res.data
-                        this.issearching=true
-                        
+                        this.posts = res
                     })
                     .catch(err => {
                         console.log(err)
@@ -82,8 +75,6 @@ import categories from './Categories.vue'
                 else{
                     let oldposts = JSON.parse(localStorage.getItem('all-posts'))
                     this.posts=oldposts
-                    this.issearching=false
-
                 }
             }
         },

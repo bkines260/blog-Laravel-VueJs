@@ -124,6 +124,7 @@ class PostController extends Controller
         }
         return response()->json($posts);
     }
+    
     public function searchPosts($query){        
         $posts = Post::where('title','like','%'.$query.'%')->with('user')->get();
         foreach($posts as $post){
