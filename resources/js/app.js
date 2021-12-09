@@ -31,10 +31,65 @@ Vue.component('login', require('./components/Login.vue').default);
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
- */
+*/
 
 import router from './routes/routes';
+
+import Vuex from 'vuex' ;
+import axios from 'axios';
+
+Vue.use(Vuex);
+
+// sate action mutations getters
+const store = new Vuex.Store({
+    state: {
+        userToken : null
+    },
+    getters: { // Centred data from store
+         isLogged(state){
+             return !!state.userToken;
+         }
+    },
+    mutations:{
+        setUserToken(state,userToken){
+            state.userToken=userToken;
+            localStorage.setItem('userToken',JSON.stringify(userToken));
+            axios.defaults.headers.common.Authorization= `bearer ${userToken}`;
+        },
+        removeUserToken(state){
+            state.userToken = null;
+            localStorage.removeItem('userToken');
+        }
+    },
+    actions: {
+        RegisterUser({commit},payload){
+            axios.post('/api/register',payload)
+            .then(res=>{
+                console.log(res);
+                commit('setUserToken',payload.token)
+            })
+            .catch(err =>{
+                console.log(err);
+            })
+        },
+        LoginUser({commit},payload){
+            axios.post('/api/login',payload)
+            .then(res=>{
+                console.log(res);
+                commit('setUserToken',payload.token)
+            })
+            .catch(err =>{
+                console.log(err);
+            })
+        }
+
+
+    }
+})
+
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store:store
+
 });

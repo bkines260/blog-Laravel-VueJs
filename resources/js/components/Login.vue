@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block" :disabled="!isValidForm" @click.prevent="submitRegister">Log in</button>
+                        <button type="submit" class="btn btn-primary btn-block" :disabled="!isValidForm" @click.prevent="submitLogin">Log in</button>
                     </div>
                     <div class="clearfix">
                         <a href="#" class="pull-right">Forgot Password?</a>
@@ -59,7 +59,7 @@
             }            
         },
         methods:{
-            submitRegister(){
+            submitLogin(){
                 console.log('submiited');
             }
         }
