@@ -2395,24 +2395,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      post: ''
+      post: '',
+      body: '',
+      post_id: '',
+      comments: []
     };
   },
   created: function created() {
     this.getPost();
+    this.updateToken();
   },
   methods: {
     getPost: function getPost() {
       var _this = this;
 
       axios.get('/api/posts/' + this.$route.params.slug).then(function (res) {
-        _this.post = res.data;
+        _this.post = res.data, _this.post_id = _this.post.id, _this.comments = _this.post.comments;
       })["catch"](function (err) {
         console.log(err);
       });
+    },
+    addComment: function addComment() {
+      var _this2 = this;
+
+      var body = this.body,
+          post_id = this.post_id;
+      axios.post('/api/comment/create', {
+        body: body,
+        post_id: post_id
+      }).then(function (res) {
+        console.log(res.data);
+
+        _this2.comments.unshift(res.data);
+      });
+    },
+    updateToken: function updateToken() {
+      var token = JSON.parse(localStorage.getItem('userToken'));
+      this.$store.commit('setUserToken', token);
+    }
+  },
+  computed: {
+    isLogged: function isLogged() {
+      return this.$store.getters.isLogged;
     }
   }
 });
@@ -2699,7 +2727,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     setUserToken: function setUserToken(state, userToken) {
       state.userToken = userToken;
       localStorage.setItem('userToken', JSON.stringify(userToken));
-      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.common.Authorization) = "bearer ".concat(userToken);
+      (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.common.Authorization) = "Bearer ".concat(userToken);
     },
     removeUserToken: function removeUserToken(state) {
       state.userToken = null;
@@ -39787,7 +39815,75 @@ var render = function () {
           _vm._v("\n          " + _vm._s(_vm.post.body) + "      \n          "),
           _c("hr"),
           _vm._v(" "),
-          _vm._m(0),
+          _c("div", { staticClass: "card my-4" }, [
+            _c("h5", { staticClass: "card-header" }, [
+              _vm._v("Leave a Comment:"),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("form", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.post_id,
+                      expression: "post_id",
+                    },
+                  ],
+                  attrs: { type: "hidden", name: "" },
+                  domProps: { value: _vm.post_id },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.post_id = $event.target.value
+                    },
+                  },
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.body,
+                        expression: "body",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { rows: "3" },
+                    domProps: { value: _vm.body },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.body = $event.target.value
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "submit" },
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.addComment.apply(null, arguments)
+                      },
+                    },
+                  },
+                  [_vm._v("Submit")]
+                ),
+              ]),
+            ]),
+          ]),
           _vm._v(" "),
           _vm._l(_vm.post.comments, function (comment, index) {
             return _c("div", { key: index, staticClass: "media mb-4" }, [
@@ -39806,7 +39902,7 @@ var render = function () {
                   _vm._v(_vm._s(comment.user.name)),
                 ]),
                 _vm._v(
-                  "\n              " + _vm._s(_vm.post.body) + "\n            "
+                  "\n              " + _vm._s(comment.body) + "\n            "
                 ),
               ]),
             ])
@@ -39816,35 +39912,10 @@ var render = function () {
       ),
     ]),
     _vm._v(" "),
-    _vm._m(1),
+    _vm._m(0),
   ])
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card my-4" }, [
-      _c("h5", { staticClass: "card-header" }, [_vm._v("Leave a Comment:")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("form", [
-          _c("div", { staticClass: "form-group" }, [
-            _c("textarea", {
-              staticClass: "form-control",
-              attrs: { rows: "3" },
-            }),
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-            [_vm._v("Submit")]
-          ),
-        ]),
-      ]),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement
