@@ -58,14 +58,13 @@
         data(){
             return{
                 name:'',
-                //lastname:'',
                 email:'',
                 password:'',
             }
         },
         computed:{
             nameError(){
-                return this.name.length > 0 &&  this.name.length < 4
+                return this.name.length > 0 &&  this.name.length < 5
             },  
             // lastnameError(){
             //     return this.lastname.length > 0 &&  this.lastname.length < 4
@@ -80,17 +79,13 @@
                 return this.name.length > 4 // &&  this.lastname.length > 4 
                 && this.password.length > 5 && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email) ;
             }            
-        },
+        }, 
         methods:{
             submitRegister(){                
                 // client sid localstorage sessionstorage indexed db state managment system
                 // Vue vuex 
-
-                // this.$store.state.userToken="ines";
-                // console.log(this.$store.state.userToken);
-
-                console.log(this.$store.getters.isLogged);
-                this.$store.commit('setUserToken','sdfqsdfsdqfsdq');
+                let {name,email,password}=this;
+                this.$store.dispatch('RegisterUser',{name,email,password});
             } 
         }
     }

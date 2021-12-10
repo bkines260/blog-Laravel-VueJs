@@ -60,7 +60,8 @@
         },
         methods:{
             submitLogin(){
-                console.log('submiited');
+                let {email,password}=this;
+                this.$store.dispatch('LoginUser',{email,password});
             }
         }
     }

@@ -2299,7 +2299,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitLogin: function submitLogin() {
-      console.log('submiited');
+      var email = this.email,
+          password = this.password;
+      this.$store.dispatch('LoginUser', {
+        email: email,
+        password: password
+      });
     }
   }
 });
@@ -2593,14 +2598,13 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       name: '',
-      //lastname:'',
       email: '',
       password: ''
     };
   },
   computed: {
     nameError: function nameError() {
-      return this.name.length > 0 && this.name.length < 4;
+      return this.name.length > 0 && this.name.length < 5;
     },
     // lastnameError(){
     //     return this.lastname.length > 0 &&  this.lastname.length < 4
@@ -2620,10 +2624,14 @@ __webpack_require__.r(__webpack_exports__);
     submitRegister: function submitRegister() {
       // client sid localstorage sessionstorage indexed db state managment system
       // Vue vuex 
-      // this.$store.state.userToken="ines";
-      // console.log(this.$store.state.userToken);
-      console.log(this.$store.getters.isLogged);
-      this.$store.commit('setUserToken', 'sdfqsdfsdqfsdq');
+      var name = this.name,
+          email = this.email,
+          password = this.password;
+      this.$store.dispatch('RegisterUser', {
+        name: name,
+        email: email,
+        password: password
+      });
     }
   }
 });
@@ -2679,12 +2687,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
     userToken: null
   },
+  // functions 
   getters: {
     // Centred data from store
     isLogged: function isLogged(state) {
       return !!state.userToken;
     }
   },
+  // edit store data(Synchronous)
   mutations: {
     setUserToken: function setUserToken(state, userToken) {
       state.userToken = userToken;
@@ -2696,12 +2706,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       localStorage.removeItem('userToken');
     }
   },
+  // entre components et mutations(asynchronous)
   actions: {
     RegisterUser: function RegisterUser(_ref, payload) {
       var commit = _ref.commit;
       axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/register', payload).then(function (res) {
         console.log(res);
-        commit('setUserToken', payload.token);
+        commit('setUserToken', res.data.data.token);
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2710,7 +2721,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       var commit = _ref2.commit;
       axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/login', payload).then(function (res) {
         console.log(res);
-        commit('setUserToken', payload.token);
+        commit('setUserToken', res.data.data.token);
       })["catch"](function (err) {
         console.log(err);
       });
