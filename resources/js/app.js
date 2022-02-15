@@ -43,12 +43,19 @@ Vue.use(Vuex);
 // sate action mutations getters
 const store = new Vuex.Store({
     state: {
-        userToken : null
+        userToken : null,
+        user:null,
     },
     // functions 
     getters: { // Centred data from store
-        isLogged(state){
+        isLogged(state){            
             return !!state.userToken;
+        },
+        isAdmin(state){
+            if(state.user){
+                return state.user.is_admin
+            }
+            return null
         }
     },
     // edit store data(Synchronous)
@@ -60,7 +67,16 @@ const store = new Vuex.Store({
         },
         removeUserToken(state){
             state.userToken = null;
+            localStorage.removeItem('userToken');       
+        },
+        setUser(state, user){
+            state.user=user
+        },
+        logout(state){
+            state.userToken = null
+            state.user = null
             localStorage.removeItem('userToken'); 
+            window.location.pathname="/";
         }
     },
     // entre components et mutations(asynchronous)
@@ -72,21 +88,24 @@ const store = new Vuex.Store({
                 commit('setUserToken',res.data.data.token)
             })
             .catch(err =>{
-                console.log(err);
+                console.log(err)
             })
         },
         LoginUser({commit},payload){
             axios.post('/api/login',payload)
             .then(res=>{ 
-                console.log(res);
+                console.log(res)
                 commit('setUserToken',res.data.data.token)
+                axios.get('/api/user')
+                .then(res => {        
+                    console.log(res.data.user)           
+                    commit('setUser',res.data.user)
+                })
             })
             .catch(err =>{
                 console.log(err);
             })
         }
-
-
     }
 })
 

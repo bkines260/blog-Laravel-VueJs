@@ -44,5 +44,8 @@ class UserController extends  Controller
         $success['name'] =  $user->name;
    
         return $this->handleResponse($success, 'User successfully registered!');
+    }  
+    public function details(){
+        return response()->json(['user' => auth()->user()],200);
     }
 }

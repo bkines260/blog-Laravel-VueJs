@@ -22,11 +22,15 @@
 
     <!-- Custom styles for this template -->
     <link href="{{asset('css/added_style.css')}}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-       @include('layouts.header')
-       @yield('content')
+       {{-- @include('layouts.header') --}}
+       {{-- @yield('content') --}}
+       <div class="container intro-container">
+            <global-home></global-home>      
+       </div>
        @include('layouts.footer')
     </div>
     <script src="{{asset('js/app.js')}}" defer></script>

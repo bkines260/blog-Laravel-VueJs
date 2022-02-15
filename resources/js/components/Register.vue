@@ -18,12 +18,6 @@
                             .... the name is too short
                         </div>
                     </div>
-                    <!-- <div class="form-group">
-                        <input type="text" class="form-control" placeholder="lastname"  v-model="lastname">
-                        <div v-show="lastnameError" class="text-danger">
-                            .... the last name is too short 
-                        </div>
-                    </div> -->
                     <div class="form-group">
                         <input type="email" class="form-control" placeholder="email"  v-model="email">
                         <div v-show="emailError" class="text-danger">
