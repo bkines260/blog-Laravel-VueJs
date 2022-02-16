@@ -15,8 +15,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    { 
         $posts = Post::latest()->with('user')->paginate(1);
         foreach($posts as $post){
             $post->setAttribute('added_at',$post->created_at->diffForHumans());

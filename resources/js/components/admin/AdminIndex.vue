@@ -35,8 +35,8 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody v-if="posts.data">
+                        <tr v-for="(post,index) in posts.data" :key="index">
                             <td>
                                 <span class="custom-checkbox">
                                     <input type="checkbox"
@@ -44,26 +44,26 @@
                                     <label ></label>
                                 </span>
                             </td>
-                            <td>post title</td>
-                            <td>post body </td>
+                            <td>{{ post.title }}</td>
+                            <td>{{ post.body.substr(0,150) }}</td>
                             <td>
-                                <span class="badge badge-info p-1 mb-1">category name</span>
+                                <span class="badge badge-info p-1 mb-1">{{ post.category.name }}</span>
                             </td>
                             <td>
-                                <img src="" style="width:100px;height:60px;border:1px solid #e7e7e7" alt="">
+                                <img :src="'img/'+post.image" style="width:100px;height:60px;border:1px solid #e7e7e7" alt="">
                             </td>
-                            <td>post creator</td>
+                            <td>{{ post.user.name }}</td>
                             <td>
                                 <a href="#editPostModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 <a href="#deletePostModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                <router-link  class="" target="_blank"><i class="material-icons" data-toggle="tooltip" title="Delete">&#128065;</i></router-link>
+                                <!-- <router-link  class="" target="_blank"><i class="material-icons" data-toggle="tooltip" title="Delete">&#128065;</i></router-link>  -->
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>                   
                 </table>
                 <div class="clearfix">
                     <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                  
+                    <pagination :data="posts" @pagination-change-page="getPosts"></pagination>                    
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <editpost></editpost>
+       
         <!-- Delete Modal HTML -->
         <div id="deletePostModal" class="modal fade">
             <div class="modal-dialog">
@@ -154,36 +154,31 @@
 </template>
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        data(){
+            return{
+                posts: {}
+            }
+        },
+        created(){
+            this.getPosts();
+            console.log(this.posts);
+        },
+        methods:{
+             getPosts(page){
+                axios.get('/api/admin/posts?page='+page)
+                .then(res=>
+                    {
+                        this.posts=res.data
+                        localStorage.setItem('all-posts', JSON.stringify(this.posts))
+                        console.log(res);
+                    }
+                )
+                .then(err => console.log(err))
+            }
         }
     }
 </script>
-<script>
-    $(document).ready(function() {
-        // Activate tooltip
-        $('[data-toggle="tooltip"]').tooltip();
 
-        // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function() {
-            if (this.checked) {
-                checkbox.each(function() {
-                    this.checked = true;
-                });
-            } else {
-                checkbox.each(function() {
-                    this.checked = false;
-                });
-            }
-        });
-        checkbox.click(function() {
-            if (!this.checked) {
-                $("#selectAll").prop("checked", false);
-            }
-        });
-    });
-</script>
 <style>
     #cont {
         color: #566787;
