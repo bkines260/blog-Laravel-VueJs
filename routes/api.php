@@ -33,5 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::group(['prefix'=>'/admin', 'middleware'=>'auth:sanctum'],function(){
     Route::get('posts','AdminController@getPosts');
+    Route::get('categories','AdminController@getCategories');
+    Route::post('addPost','AdminController@addPost');
+    Route::post('updatePost','AdminController@updatePost');
 
 });

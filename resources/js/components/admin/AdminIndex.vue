@@ -50,13 +50,13 @@
                                 <span class="badge badge-info p-1 mb-1">{{ post.category.name }}</span>
                             </td>
                             <td>
-                                <img :src="'img/'+post.image" style="width:100px;height:60px;border:1px solid #e7e7e7" alt="">
+                                <img :src="'img/'+post.image" style="width:100px;height:60px;border:1px solid #e7e7e7;object-fit:cover" alt="">
                             </td>
                             <td>{{ post.user.name }}</td>
                             <td>
-                                <a href="#editPostModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                <a href="#editPostModal" class="edit" data-toggle="modal" @click="editPost(post,$event)"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 <a href="#deletePostModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                <!-- <router-link  class="" target="_blank"><i class="material-icons" data-toggle="tooltip" title="Delete">&#128065;</i></router-link>  -->
+                                <router-link :to="'/post/'+post.slug" class="" target="_blank"><i class="material-icons" data-toggle="tooltip" title="Delete">&#128065;</i></router-link>
                             </td>
                         </tr>
                     </tbody>                   
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <!-- Edit Modal HTML -->
+        <!-- Add Modal HTML -->
         <div id="addPostModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -79,36 +79,35 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>title</label>
-                                <input type="text" class="form-control" required>
+                                <input type="text" class="form-control" required v-model="title">
                             </div>
                             <div class="form-group">
                                 <label>body</label>
-                                <textarea name="" cols="30" class="form-control" rows="10"></textarea>
+                                <textarea name="" cols="30" class="form-control" rows="10" v-model="body"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>category</label>
-                                <select name="" class="form-control">
+                                <select name="category" class="form-control" v-model="category">
                                     <option value="0" disabled selected>choose category</option>
-
-                                    <option value="1" >
-                                      some category name
+                                    <option :value="category.id" v-for="category in categories" :key="category.id" >
+                                      {{ category.name}}
                                     </option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>image</label>
-                                <input type="file" class="form-control" required>
+                                <input type="file" class="form-control"   @change="onImageChanged" required>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-success" value="Add" >
+                            <input type="submit" class="btn btn-success" value="Add" @click.prevent="AddPost" >
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-       
+       <edit-post></edit-post>
         <!-- Delete Modal HTML -->
         <div id="deletePostModal" class="modal fade">
             <div class="modal-dialog">
@@ -152,17 +151,27 @@
     <!--modals-->
     </div>    
 </template>
+
 <script>
-    export default {
+import EditPost from './EditPost.vue';
+    export default {    
         data(){
             return{
-                posts: {}
+                posts: {},
+                title: '',
+                body: '',
+                image: '',
+                category: '',
+                categories: [],
             }
+        },
+        components:{
+            EditPost
         },
         created(){
             this.getPosts();
-            console.log(this.posts);
-        },
+            this.getCategories()
+        },         
         methods:{
              getPosts(page){
                 axios.get('/api/admin/posts?page='+page)
@@ -174,10 +183,72 @@
                     }
                 )
                 .then(err => console.log(err))
+            },            
+            getCategories(){
+                axios.get('/api/admin/categories')
+                .then(res=>
+                    {
+                        console.log(res);
+                        this.categories=res.data;
+                    }
+                )
+                .then(err => console.log(err))
+            }, 
+            onImageChanged(event){                
+                this.image=event.target.files[0];
+            },
+            AddPost(){
+                let config = {
+                    headers:{ "content-type" : "multipart/form-data" }
+                }
+                let formdata = new FormData();
+                formdata.append('title', this.title);
+                formdata.append('body', this.body);
+                formdata.append('image', this.image);
+                formdata.append('category', this.category);
+                console.log(this.title,this.body,this.image,this.category);
+                axios.post('/api/admin/addPost',formdata, config)
+                .then(res => {
+                    this.title='';
+                    this.body = '';
+                    this.category = '';
+                    this.image = '';
+                    $('#addPostModal').modal('hide');
+                    $('.modal-backdrop').css('display','none');
+                })
+            },
+            editPost(post){
+                this.$store.commit('EditPost',post)
             }
         }
     }
+    
+    $(document).ready(function() {
+        // Activate tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function() {
+            if (this.checked) {
+                checkbox.each(function() {
+                    this.checked = true;
+                });
+            } else {
+                checkbox.each(function() {
+                    this.checked = false;
+                });
+            }
+        });
+        checkbox.click(function() {
+            if (!this.checked) {
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+
 </script>
+
 
 <style>
     #cont {

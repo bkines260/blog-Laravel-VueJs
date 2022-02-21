@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Middleware\IsAdmin;
+use Auth ;
+use Illuminate\Support\Str ;
 class AdminController extends Controller
 {
     //
@@ -19,5 +21,40 @@ class AdminController extends Controller
             $post->setAttribute('comments_count',$post->comments->count());
         }
         return response()->json($posts);
+    }
+    public function getCategories(){
+        $categories = Category::get();
+        return response()->json( $categories );
+    }
+    public function addPost(Request $request){
+        $filename ='';
+        if($request->hasFile('image')){
+            $filename = time().'.'.$request->image->getClientOriginalExtension();
+            $request->image->move(public_path('img'),$filename) ;
+        }
+        $post = Post::create([
+            'title'=>$request->title,
+            'slug'=>Str::slug($request->title),
+            'body'=>$request->body,
+            'category_id'=>$request->category,
+            'user_id'=>Auth::id(),
+            'image'=>$filename,
+        ]);
+        return response()->json($post);
+    }
+    public function updatePost(Request $request){
+        $post = Post::find($request->id);
+        $filename = $post->image;
+        if($request->hasFile('image')){
+            $filename = time().'.'.$request->image->getClientOriginalExtension();
+            $request->image->move(public_path('img'),$filename) ;
+        }
+        $post->title = $request->title ;
+        $post->slug = Str::slug($request->title);
+        $post->body = $request->body;
+        $post->category_id = $request->category;
+        $post->image = $filename != '' ? $filename : $post->image;
+        $post->save();       
+        return response()->json($post);
     }
 }

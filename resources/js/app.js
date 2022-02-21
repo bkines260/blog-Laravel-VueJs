@@ -45,7 +45,8 @@ const store = new Vuex.Store({
     state: {
         userToken : null,
         user:null,
-    },
+        EditedPost: {}
+    }, 
     // functions 
     getters: { // Centred data from store
         isLogged(state){            
@@ -56,6 +57,9 @@ const store = new Vuex.Store({
                 return state.user.is_admin
             }
             return null
+        },
+        PostToEdit(state){
+            return state.EditedPost ;
         }
     },
     // edit store data(Synchronous)
@@ -77,6 +81,9 @@ const store = new Vuex.Store({
             state.user = null
             localStorage.removeItem('userToken'); 
             window.location.pathname="/";
+        },
+        EditPost(state, post){
+            state.EditedPost = post;
         }
     },
     // entre components et mutations(asynchronous)
