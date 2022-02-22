@@ -39,8 +39,7 @@
                         <tr v-for="(post,index) in posts.data" :key="index">
                             <td>
                                 <span class="custom-checkbox">
-                                    <input type="checkbox"
-                                    name="options[]" value="1">
+                                    <input type="checkbox" :id="'checkbox'+index" @click.stop="selectPost(post,$event)"   name="options[]" value="1">
                                     <label ></label>
                                 </span>
                             </td>

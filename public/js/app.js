@@ -2895,7 +2895,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -41649,7 +41648,26 @@ var render = function () {
                     "tbody",
                     _vm._l(_vm.posts.data, function (post, index) {
                       return _c("tr", { key: index }, [
-                        _vm._m(2, true),
+                        _c("td", [
+                          _c("span", { staticClass: "custom-checkbox" }, [
+                            _c("input", {
+                              attrs: {
+                                type: "checkbox",
+                                id: "checkbox" + index,
+                                name: "options[]",
+                                value: "1",
+                              },
+                              on: {
+                                click: function ($event) {
+                                  $event.stopPropagation()
+                                  return _vm.selectPost(post, $event)
+                                },
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c("label"),
+                          ]),
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(post.title))]),
                         _vm._v(" "),
@@ -41709,7 +41727,7 @@ var render = function () {
                               ]
                             ),
                             _vm._v(" "),
-                            _vm._m(3, true),
+                            _vm._m(2, true),
                             _vm._v(" "),
                             _c(
                               "router-link",
@@ -41747,7 +41765,7 @@ var render = function () {
               "div",
               { staticClass: "clearfix" },
               [
-                _vm._m(4),
+                _vm._m(3),
                 _vm._v(" "),
                 _c("pagination", {
                   attrs: { data: _vm.posts },
@@ -41766,7 +41784,7 @@ var render = function () {
             _c("div", { staticClass: "modal-dialog" }, [
               _c("div", { staticClass: "modal-content" }, [
                 _c("form", { attrs: { enctype: "multipart/form-data" } }, [
-                  _vm._m(5),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
                     _c("div", { staticClass: "form-group" }, [
@@ -41923,9 +41941,9 @@ var render = function () {
         _vm._v(" "),
         _c("edit-post"),
         _vm._v(" "),
-        _vm._m(6),
+        _vm._m(5),
         _vm._v(" "),
-        _vm._m(7),
+        _vm._m(6),
       ],
       1
     ),
@@ -42010,20 +42028,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("User")]),
         _vm._v(" "),
         _c("th", [_vm._v("Action")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("span", { staticClass: "custom-checkbox" }, [
-        _c("input", {
-          attrs: { type: "checkbox", name: "options[]", value: "1" },
-        }),
-        _vm._v(" "),
-        _c("label"),
       ]),
     ])
   },

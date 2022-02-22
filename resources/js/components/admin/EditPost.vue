@@ -20,7 +20,7 @@
                             <label>category</label>
                             <select name="category" class="form-control" v-if="PostToEdit.category" v-model="PostToEdit.category.id">
                                 <option value="0" disabled selected>choose category</option>
-                                <option :value="category.id" v-for="category in categories" :key="category.id" >
+                                <option :value="category.id"  v-for="category in categories" :key="category.id" >
                                     {{ category.name}}
                                 </option>
                             </select>
